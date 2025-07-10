@@ -25,17 +25,17 @@ import config from './src/site.config.ts'
 // https://astro.build/config
 export default defineConfig({
   // Top-Level Options
-  site: 'https://astro-pure.js.org',
+  site: 'https://kmblog.kemeow.top',
   // base: '/docs',
   trailingSlash: 'never',
 
   // Adapter
   // https://docs.astro.build/en/guides/deploy/
   // 1. Vercel (serverless)
-  // adapter: vercel(),
-  // output: 'server',
+  adapter: vercelStatic({}), 
+  // output: 'static',
   // 2. Vercel (static)
-  adapter: vercelStatic(),
+  // adapter: vercelStatic(),
   // 3. Local (standalone)
   // adapter: node({ mode: 'standalone' }),
   // output: 'server',
