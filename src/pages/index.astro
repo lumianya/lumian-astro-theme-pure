@@ -9,10 +9,10 @@ import PageLayout from '@/layouts/BaseLayout.astro'
 import ProjectCard from '@/components/home/ProjectCard.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
-import avatar from '@/assets/avatar.png'
+import avatar from '@/assets/kemiao.jpg'
 import config from '@/site-config'
 
-const languages = ['Html', 'JavaScript', 'CSS', 'Shell']
+const languages = ['Html', 'JavaScript', 'CSS', 'JS']
 const frontend = ['TypeScript', 'Vite', 'Webpack', 'Astro']
 const backend = ['Vercel', 'Waline']
 
@@ -40,7 +40,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           <Label
             title='Source code'
             as='a'
-            href='https://github.com/cworld1/astro-theme-pure'
+            href='https://github.com/lumianya/lumian-astro-theme-pure'
             target='_blank'
           >
             <Icon name='github' class='size-5' slot='icon' />
@@ -50,7 +50,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 
       {/* Get template */}
       <a
-        href='https://github.com/cworld1/astro-theme-pure'
+        href='https://github.com/Kemeow815'
         target='_blank'
         class='flex flex-row items-center gap-x-3 rounded-full border bg-background px-4 py-2 text-sm shadow-sm transition-shadow hover:shadow-md'
       >
@@ -60,23 +60,22 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           ></span>
           <span class='size-2 rounded-full bg-green-400'></span>
         </span>
-        <p class='font-medium text-muted-foreground'>Get Template</p>
+        <p class='font-medium text-muted-foreground'>我的Github</p>
       </a>
     </section>
 
     <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
       <Section title='About'>
-        <p class='text-muted-foreground'>Developer / Designer</p>
+        <p class='text-muted-foreground'>阁主 / 克喵</p>
         <p class='text-muted-foreground'>
-          Lorem ipsum dolor sit amet, vidit suscipit at mei. Quem denique mea id. Usu ei regione
-          indoctum dissentiunt, cu meliore fuisset mei, vel quod voluptua ne. Ex dicat impedit mel,
-          at eum oratio possit voluptatum.
+          一个普通的在南京就读的双非学校的大学生，致力于分享资源和生活点滴。
+          分享的资源和文章均来自互联网，如有侵权，请联系我删除。
         </p>
         <Button title='More about me' class='w-fit self-end' href='/about' style='ahead' />
       </Section>
       {
         allPostsByDate.length > 0 && (
-          <Section title='Posts'>
+          <Section title='文章'>
             <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
               {allPostsByDate.map((p) => (
                 <li class='flex flex-col gap-x-2 sm:flex-row'>
@@ -121,10 +120,10 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
       <Section title='Education'>
         <Card
           as='a'
-          heading='Lorem ipsum'
-          subheading='Lorem ipsum dolor sit amet, vidit suscipit at mei.'
-          date='August 2021 - July 2025'
-          href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+          heading='南京工业职业技术大学'
+          subheading='普通大学生'
+          date='September 2023 - June 2027'
+          href='https://www.niit.edu.cn/'
         >
           {
             /* <ul class='ms-4 list-disc text-muted-foreground'>
@@ -141,23 +140,29 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
       <Section title='Website List'>
         <div class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
           <ProjectCard
-            href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-            heading='Lorem ipsum'
-            subheading='dolor sit amet, oratio ornatus explicari pro ex'
-            imagePath='/src/assets/projects/alex-tyson-2BAXJ7ha74s-unsplash.jpg'
+            href='https://status.kemeow.cn/'
+            heading='Website status'
+            subheading='Record status of Ke Miao websites'
+            imagePath='/src/assets/projects/status.png'
           />
           <ProjectCard
-            href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-            heading='Lorem ipsum'
-            subheading='dolor sit amet, oratio ornatus explicari pro ex'
-            imagePath='/src/assets/projects/angelica-teran-Bk9hpaXHK4o-unsplash.jpg'
+            href='https://myblog.kemeow.top/'
+            heading='Github issues blog'
+            subheading='main blog'
+            imagePath='/src/assets/projects/github-issues-blog.png'
           />
           <ProjectCard
-            href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-            heading='Lorem ipsum'
-            subheading='dolor sit amet, oratio ornatus explicari pro ex'
-            imagePath='/src/assets/projects/kseniia-zapiatkina-yATU3rg8tNI-unsplash.jpg'
+            href='https://music.kemiao.online/'
+            heading='克喵の音乐馆'
+            subheading='A music page for netease'
+            imagePath='/src/assets/projects/music-page.png'
           />
+          <ProjectCard
+            href='https://shuoshuo.kemiao.online/'
+            heading='Ke Miao'
+            subheading='A personal website'
+            imagePath='/src/assets/projects/tg-shuoshuo.png'
+            />
           <ProjectCard
             href='/projects'
             heading='More projects'
@@ -167,7 +172,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
         </div>
       </Section>
 
-      <Section title='Certifications'>
+      <!-- <Section title='Certifications'>
         <Card
           as='a'
           heading='Lorem ipsum'
@@ -175,7 +180,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           date='July 2024'
           href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         />
-      </Section>
+      </Section> -->
 
       <Section title='Skills'>
         <SkillLayout title='Languages' skills={languages} />

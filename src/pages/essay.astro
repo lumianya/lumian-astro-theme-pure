@@ -1,0 +1,694 @@
+---
+// src/pages/moments.astro
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import config from '@/site-config'
+import { Comment } from 'astro-pure/advanced'
+
+interface TalkItem {
+    content: {
+        text: string
+        images: string[]
+        video?: {
+            type: 'bilibili' | 'youtube' | 'online'
+            url: string
+            id?: string
+        }
+        doubanMovie?: {
+            url: string
+            title: string
+            image: string
+            director: string
+            rating: string
+            runtime: string
+        }
+        doubanBook?: {
+            url: string
+            title: string
+            image: string
+            author: string
+            pubDate: string
+            rating: string
+        }
+        externalLink?: {
+            url: string
+            title: string
+            favicon: string
+        }
+    }
+    user: {
+        username: string
+        nickname: string
+        avatarUrl: string
+    }
+    date: string
+    location: string
+    tags: string[]
+}
+
+// 获取数据
+const API_CONFIG = {
+    MEMO_API: 'https://moment.050815.xyz/api/memo/list',
+    PAGE_SIZE: 30,
+}
+
+let talks: TalkItem[] = []
+let loading = true
+let error = false
+
+function formatTime(time: string) {
+    const d = new Date(time)
+    const ls = [d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), d.getMinutes()]
+    const r = ls.map(a => (a.toString().length === 1 ? `0${a}` : a))
+    return `${r[0]}-${r[1]}-${r[2]} ${r[3]}:${r[4]}`
+}
+
+function formatContent(item: any) {
+    let content = item.content
+    const imgs = item.imgs ? item.imgs.split(',') : []
+    const ext = JSON.parse(item.ext || '{}')
+
+    content = content
+        .replace(/$$(.*?)$$$$(.*?)$$/g, `<a class="talk_content_link" target="_blank" rel="nofollow" href="$2">@$1</a>`)
+        .replace(/- $$ $$/g, '⚪')
+        .replace(/- $$x$$/g, '⚫')
+        .replace(/\n/g, '<br>')
+
+    content = `<div class="talk_content_text">${content}</div>`
+
+    return {
+        text: content,
+        images: imgs.map((img: string) => img.startsWith('http') ? img : `https:${img}`),
+        video: ext.video?.type === 'bilibili'
+            ? {
+                    type: 'bilibili',
+                    url: ext.video.value,
+                    id: ext.video.value.match(/BV\w+/)?.[0],
+                }
+            : ext.video?.type === 'youtube'
+                ? {
+                        type: 'youtube',
+                        url: ext.video.value,
+                        id: ext.video.value.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/)?.[1],
+                    }
+                : ext.video?.type === 'online'
+                    ? {
+                            type: 'online',
+                            url: ext.video.value,
+                        }
+                    : null,
+        doubanMovie: ext.doubanMovie?.id
+            ? {
+                    url: ext.doubanMovie.url,
+                    title: ext.doubanMovie.title,
+                    image: ext.doubanMovie.image,
+                    director: ext.doubanMovie.director,
+                    rating: ext.doubanMovie.rating,
+                    runtime: ext.doubanMovie.runtime,
+                }
+            : null,
+        doubanBook: ext.doubanBook?.id
+            ? {
+                    url: ext.doubanBook.url,
+                    title: ext.doubanBook.title,
+                    image: ext.doubanBook.image,
+                    author: ext.doubanBook.author,
+                    pubDate: ext.doubanBook.pubDate,
+                    rating: ext.doubanBook.rating,
+                }
+            : null,
+        externalLink: item.externalUrl
+            ? {
+                    url: item.externalUrl,
+                    title: item.externalTitle,
+                    favicon: item.externalFavicon,
+                }
+            : null,
+    }
+}
+
+try {
+    const response = await fetch(API_CONFIG.MEMO_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ size: API_CONFIG.PAGE_SIZE }),
+    })
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data = await response.json()
+
+    if (data.code === 0 && data.data?.list) {
+        talks = data.data.list.map((item: any) => ({
+            content: formatContent(item),
+            user: {
+                username: item.user.username,
+                nickname: item.user.nickname,
+                avatarUrl: item.user.avatarUrl,
+            },
+            date: formatTime(item.createdAt),
+            location: item.location || '',
+            tags: item.tags
+                ? (typeof item.tags === 'string'
+                        ? item.tags.split(',').filter((tag: string) => tag.trim())
+                        : item.tags)
+                : ['无标签'],
+        }))
+    }
+    loading = false
+} catch (err) {
+    console.error('Error fetching talks:', err)
+    error = true
+    loading = false
+}
+
+// SEO 配置
+const title = '瞬间'
+const description = `${config.title}的碎碎念页面，记录生活点滴，一些想法和生活。`
+---
+
+<BaseLayout meta={{ title, description }}>
+    <div class="page-container">
+        <div class="page-banner">
+            <h1 class="page-title">瞬间</h1>
+            <p class="page-subtitle">记录生活点滴，一些想法</p>
+            <div class="essay-stats">
+                <div class="powered-by">Powered by moments</div>
+                <a class="essay-more" href="https://moment.050815.xyz" target="_blank" rel="noopener noreferrer">
+                    <span class="icon">→</span>
+                    查看更多
+                </a>
+            </div>
+        </div>
+
+        <div class="page-essay">
+            <div class="talk-container">
+                {loading ? (
+                    <div class="loading-container">
+                        <div class="loading-spinner" />
+                        <p>加载中...</p>
+                    </div>
+                ) : error ? (
+                    <div class="error-container">
+                        <span class="error-icon">⚠️</span>
+                        <p>加载失败，请刷新页面重试</p>
+                    </div>
+                ) : (
+                    <div class="talks-list">
+                        {talks.map((item, index) => (
+                            <div 
+                                class="talk-item" 
+                                style={`--delay: ${index * 0.1}s`}
+                            >
+                                <div class="talk-meta">
+                                    <img
+                                        class="avatar"
+                                        src={item.user.avatarUrl}
+                                        alt={item.user.nickname}
+                                        width="40"
+                                        height="40"
+                                    />
+                                    <div class="info">
+                                        <div class="talk-nick">
+                                            {item.user.nickname}
+                                            <span class="verified">✓</span>
+                                        </div>
+                                        <div class="talk-date">{item.date}</div>
+                                    </div>
+                                </div>
+                                <div class="talk-content">
+                                    <div class="talk_content_text" set:html={item.content.text}></div>
+
+                                    {item.content.images.length > 0 && (
+                                        <div class="zone_imgbox">
+                                            {item.content.images.map((img, imgIndex) => (
+                                                <figure class="img-item">
+                                                    <img
+                                                        src={img}
+                                                        class="talk-img"
+                                                        loading={imgIndex === 0 ? 'eager' : 'lazy'}
+                                                        alt={`图片 ${imgIndex + 1}`}
+                                                    />
+                                                </figure>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {item.content.video && (
+                                        <div class="video-container">
+                                            {item.content.video.type === 'bilibili' ? (
+                                                <iframe
+                                                    src={`//player.bilibili.com/player.html?bvid=${item.content.video.id}&autoplay=0`}
+                                                    scrolling="no"
+                                                    frameborder="no"
+                                                    allowfullscreen
+                                                />
+                                            ) : item.content.video.type === 'youtube' ? (
+                                                <iframe
+                                                    src={`https://www.youtube.com/embed/${item.content.video.id}`}
+                                                    frameborder="0"
+                                                    allowfullscreen
+                                                />
+                                            ) : item.content.video.type === 'online' ? (
+                                                <video
+                                                    src={item.content.video.url}
+                                                    controls
+                                                    class="online-video"
+                                                />
+                                            ) : null}
+                                        </div>
+                                    )}
+
+                                    {item.content.doubanMovie && (
+                                        <a
+                                            class="douban-card gradient-card"
+                                            href={item.content.doubanMovie.url}
+                                            target="_blank"
+                                        >
+                                            <div
+                                                class="douban-card-bgimg"
+                                                style={`background-image: url('${item.content.doubanMovie.image}')`}
+                                            />
+                                            <div class="douban-card-left">
+                                                <div
+                                                    class="douban-card-img"
+                                                    style={`background-image: url('${item.content.doubanMovie.image}')`}
+                                                />
+                                            </div>
+                                            <div class="douban-card-right">
+                                                <div class="douban-card-item">
+                                                    <span>电影名: </span>
+                                                    <strong>{item.content.doubanMovie.title}</strong>
+                                                </div>
+                                                <div class="douban-card-item">
+                                                    <span>导演: </span>
+                                                    {item.content.doubanMovie.director}
+                                                </div>
+                                                <div class="douban-card-item">
+                                                    <span>评分: </span>
+                                                    {item.content.doubanMovie.rating}
+                                                </div>
+                                                <div class="douban-card-item">
+                                                    <span>时长: </span>
+                                                    {item.content.doubanMovie.runtime}
+                                                </div>
+                                            </div>
+                                        </a>
+                                    )}
+
+                                    {item.content.doubanBook && (
+                                        <a
+                                            class="douban-card gradient-card"
+                                            href={item.content.doubanBook.url}
+                                            target="_blank"
+                                        >
+                                            <div
+                                                class="douban-card-bgimg"
+                                                style={`background-image: url('${item.content.doubanBook.image}')`}
+                                            />
+                                            <div class="douban-card-left">
+                                                <div
+                                                    class="douban-card-img"
+                                                    style={`background-image: url('${item.content.doubanBook.image}')`}
+                                                />
+                                            </div>
+                                            <div class="douban-card-right">
+                                                <div class="douban-card-item">
+                                                    <span>书名: </span>
+                                                    <strong>{item.content.doubanBook.title}</strong>
+                                                </div>
+                                                <div class="douban-card-item">
+                                                    <span>作者: </span>
+                                                    {item.content.doubanBook.author}
+                                                </div>
+                                                <div class="douban-card-item">
+                                                    <span>出版年份: </span>
+                                                    {item.content.doubanBook.pubDate}
+                                                </div>
+                                                <div class="douban-card-item">
+                                                    <span>评分: </span>
+                                                    {item.content.doubanBook.rating}
+                                                </div>
+                                            </div>
+                                        </a>
+                                    )}
+
+                                    {item.content.externalLink && (
+                                        <div class="external-link gradient-card">
+                                            <a href={item.content.externalLink.url} target="_blank" rel="nofollow">
+                                                <div class="link-left">
+                                                    <img 
+                                                        src={item.content.externalLink.favicon} 
+                                                        alt={item.content.externalLink.title}
+                                                        width="24"
+                                                        height="24"
+                                                    />
+                                                </div>
+                                                <div class="link-right">
+                                                    <div class="link-title">
+                                                        {item.content.externalLink.title}
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    )}
+                                    <Comment slot='bottom' />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
+    </div>
+</BaseLayout>
+
+<style>
+/* 页面样式 */
+.page-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.page-banner {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.essay-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.powered-by {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.essay-more {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.essay-more:hover {
+    text-decoration: underline;
+}
+
+.icon {
+    font-size: 1rem;
+}
+
+/* 加载状态 */
+.loading-container,
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    gap: 1rem;
+}
+
+.loading-spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.error-icon {
+    font-size: 3rem;
+    color: var(--danger);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 说说列表 */
+.talks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center; /* 新增：使子项水平居中 */
+    width: 100%;
+}
+
+.talk-item {
+    opacity: 0;
+    animation: fadeIn 0.3s ease-out forwards;
+    animation-delay: var(--delay);
+    width: 100%; /* 新增：确保宽度100% */
+    max-width: 600px; /* 新增：设置最大宽度 */
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+.talk-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+}
+
+.talk-nick {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.verified {
+    color: var(--primary);
+    font-size: 1rem;
+}
+
+.talk-date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* 修改说说内容区域 */
+.talk-content {
+    padding-left: 0; /* 移除原来的左边距 */
+    width: 100%;
+}
+.talk_content_text {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.talk_content_link {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.talk_content_link:hover {
+    text-decoration: underline;
+}
+
+.zone_imgbox {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.5rem;
+    margin: 1rem 0;
+    width: 100%;
+}
+
+.img-item {
+    margin: 0;
+    overflow: hidden;
+    border-radius: 0.5rem;
+}
+
+.talk-img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    transition: transform 0.3s ease;
+}
+
+.talk-img:hover {
+    transform: scale(1.02);
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 */
+    margin: 1rem 0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.video-container iframe,
+.video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.online-video {
+    background: #000;
+}
+
+/* 豆瓣卡片 */
+.douban-card,
+.external-link {
+    width: 100%;
+}
+
+
+.douban-card-bgimg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    filter: blur(10px);
+    opacity: 0.3;
+    z-index: -1;
+}
+
+.douban-card-left {
+    flex: 0 0 100px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.douban-card-img {
+    width: 100%;
+    height: 140px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.douban-card-right {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.douban-card-item {
+    font-size: 0.9rem;
+}
+
+.douban-card-item span {
+    color: var(--text-muted);
+}
+
+.douban-card-item strong {
+    color: var(--primary);
+}
+
+/* 外部链接卡片 */
+.external-link {
+    display: flex;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    background: rgba(255, 255, 255, 0.7);
+    overflow: hidden;
+}
+
+.external-link a {
+    display: flex;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
+.link-left {
+    flex: 0 0 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.link-left img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.link-right {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.link-title {
+    font-weight: 500;
+}
+
+/* 渐变卡片 */
+.gradient-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.gradient-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    z-index: -1;
+}
+</style>

@@ -3,17 +3,17 @@ import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } fro
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
   /** Title for your website. Will be used in metadata and as browser tab title. */
-  title: 'Astro Theme Pure',
+  title: '喵落阁',
   /** Will be used in index page & copyright declaration */
-  author: 'Pure Lab',
+  author: '克喵爱吃卤面',
   /** Description metadata for your website. Can be used in page metadata. */
-  description: 'Stay hungry, stay foolish',
+  description: '奇迹只能一时，命运总是漫长。',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
   favicon: '/favicon/favicon.ico',
   /** Specify the default language for this site. */
   locale: {
-    lang: 'en-US',
-    attrs: 'en_US',
+    lang: 'zh-CN',
+    attrs: 'zh-CN',
     // Date locale
     dateLocale: 'en-US',
     dateOptions: {
@@ -24,7 +24,7 @@ export const theme: ThemeUserConfig = {
   },
   /** Set a logo image to show in the homepage. */
   logo: {
-    src: 'src/assets/avatar.png',
+    src: 'https://cn.cravatar.com/avatar/1F6C8947D35A8186A1647009BA8BC5F2?size=256',
     alt: 'Avatar'
   },
 
@@ -47,11 +47,13 @@ export const theme: ThemeUserConfig = {
   /** Configure the header of your site. */
   header: {
     menu: [
-      { title: 'Blog', link: '/blog' },
-      { title: 'Docs', link: '/docs' },
-      { title: 'Projects', link: '/projects' },
-      { title: 'Links', link: '/links' },
-      { title: 'About', link: '/about' }
+      { title: '博客', link: '/blog' },
+      { title: '项目', link: '/projects' },
+      { title: '友链', link: '/links' },
+      { title: '朋友圈', link: 'https://pyq.kemiao.online/' },
+      { title: '相册', link: 'https://photos.050815.xyz' },
+      { title: '音乐', link: 'https://music.kemiao.online' },
+      { title: '关于', link: '/about' },
     ]
   },
 
@@ -60,8 +62,8 @@ export const theme: ThemeUserConfig = {
     links: [
       // Registration link
       {
-        title: 'Moe ICP 114514',
-        link: 'https://icp.gov.moe/?keyword=114514',
+        title: 'Moe ICP 20250530',
+        link: 'https://icp.gov.moe/?keyword=20250530',
         style: 'text-sm' // Uno/TW CSS class
       },
       {
@@ -79,7 +81,13 @@ export const theme: ThemeUserConfig = {
     /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
     credits: true,
     /** Optional details about the social media accounts for this site. */
-    social: { github: 'https://github.com/cworld1/astro-theme-pure' }
+    social: { 
+      github: 'https://github.com/Kemeow815',
+      telegram: 'https://t.me/kemiaojun',
+      x: 'https://twitter.com/kemiaosw',
+      coolapk: 'http://www.coolapk.com/u/28712393',
+      email: 'mailto:me@kemiaosw.top', 
+    }
   },
 
   content: {
@@ -98,16 +106,14 @@ export const integ: IntegrationUserConfig = {
   links: {
     // Friend logbook
     logbook: [
-      { date: '2024-07-01', content: 'Lorem ipsum dolor sit amet.' },
-      { date: '2024-07-01', content: 'vidit suscipit at mei.' },
-      { date: '2024-07-01', content: 'Quem denique mea id.' }
+      { date: '2025-07-10', content: '重塑博客中。。。' },
     ],
     // Yourself link info
     applyTip: [
       { name: 'Name', val: theme.title },
       { name: 'Desc', val: theme.description || 'Null' },
-      { name: 'Link', val: 'https://astro-pure.js.org/' },
-      { name: 'Avatar', val: 'https://astro-pure.js.org/favicon/favicon.ico' }
+      { name: 'Link', val: 'https://kmblog.kemeow.top/' },
+      { name: 'Avatar', val: 'https://cn.cravatar.com/avatar/1F6C8947D35A8186A1647009BA8BC5F2?size=256' }
     ]
   },
   // Enable page search function
@@ -140,7 +146,7 @@ export const integ: IntegrationUserConfig = {
   waline: {
     enable: true,
     // Server service link
-    server: 'https://astro-theme-pure-waline.arthals.ink/',
+    server: 'https://waline-astrpure.314926.xyz/',
     // Refer https://waline.js.org/en/guide/features/emoji.html
     emoji: ['bmoji', 'weibo'],
     // Refer https://waline.js.org/en/reference/client/props.html
