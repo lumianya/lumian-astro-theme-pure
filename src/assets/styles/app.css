@@ -73,7 +73,7 @@ html.dark {
 }
 
 /* 优化卡片样式 */
-/* .memo-card {
+.memo-card {
   border-radius: 0.5rem;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   transition: transform 0.2s;
@@ -81,7 +81,7 @@ html.dark {
 
 .memo-card:hover {
   transform: translateY(-2px);
-} */
+}
 
 /* 响应式调整 */
 @media (max-width: 768px) {

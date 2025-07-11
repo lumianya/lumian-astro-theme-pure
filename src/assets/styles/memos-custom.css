@@ -1,0 +1,105 @@
+/* memos-custom.css */
+/* ===== 全局样式 ===== */
+#memos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+  
+  /* ===== 卡片主体 ===== */
+  .memo {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px); /* 毛玻璃效果 */
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 
+      0 4px 6px rgba(0, 0, 0, 0.05), 
+      0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(241, 241, 241, 0.5);
+  }
+  
+  /* ===== 卡片悬停效果 ===== */
+  .memo:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+      0 10px 15px -3px rgba(56, 189, 248, 0.2),
+      0 4px 6px -4px rgba(56, 189, 248, 0.2);
+  }
+  
+  /* ===== 标题样式 ===== */
+  .memo-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(229, 229, 229, 0.5);
+  }
+  
+  .memo-username {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 1.1rem;
+  }
+  
+  .memo-name {
+    color: #64748b;
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  /* ===== 内容样式 ===== */
+  .memo-content {
+    line-height: 1.6;
+    color: #334155;
+  }
+  
+  .memo-content a {
+    color: #38bdf8; /* 使用您的高亮色 */
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(56, 189, 248, 0.4);
+  }
+  
+  .memo-content a:hover {
+    color: #0ea5e9;
+    border-bottom-style: solid;
+  }
+  
+  /* ===== 时间戳样式 ===== */
+  .memo-time {
+    display: block;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    text-align: right;
+  }
+  
+  /* ===== 深色模式适配 ===== */
+  @media (prefers-color-scheme: dark) {
+    .memo {
+      background: rgba(30, 41, 59, 0.7);
+      border-color: rgba(55, 65, 81, 0.5);
+    }
+    
+    .memo-username {
+      color: #f1f5f9;
+    }
+    
+    .memo-content {
+      color: #cbd5e1;
+    }
+    
+    .memo-name,
+    .memo-time {
+      color: #94a3b8;
+    }
+  }
+  
+  /* ===== 响应式调整 ===== */
+  @media (max-width: 768px) {
+    #memos {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
