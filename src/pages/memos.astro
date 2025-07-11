@@ -1,0 +1,69 @@
+---
+// src/components/Memos.astro
+import BaseLayout from '@/layouts/BaseLayout.astro'; // 导入布局组件
+
+// 页面元数据
+const title = "我的Memos";
+const description = "我的个人备忘录集合";
+
+---
+
+<BaseLayout 
+  meta={{ 
+    title,
+    description,
+  }}
+  highlightColor="#38bdf8"
+>
+  <!-- 外部CSS资源 -->
+  <link 
+    href="https://static.314926.xyz/css/memos/style.css" 
+    rel="stylesheet" 
+    type="text/css" 
+  />
+  <link 
+    href="https://memos.314926.xyz/memos/highlight.github.min.css" 
+    rel="stylesheet" 
+    type="text/css" 
+  />
+
+  <!-- Memos容器 -->
+  <section id="main" class="container py-10">
+    <div id="memos" class="memos"></div>
+  </section>
+
+  <!-- 全局配置 -->
+  <script is:inline>
+    window.memos = {
+      host: 'https://memos.050815.xyz',
+      limit: '10',
+      creatorId: '1',
+      domId: '#memos',
+      username: 'kemiao',
+      name: '克喵爱吃卤面',
+    };
+  </script>
+
+  <!-- 外部JS资源 -->
+  <script is:inline src="https://memos.314926.xyz/memos/lazyload.min.js"></script>
+  <script is:inline src="https://memos.314926.xyz/memos/marked.min.js"></script>
+  <script is:inline src="https://memos.314926.xyz/memos/view-image.min.js"></script>
+  <script is:inline src="https://memos.314926.xyz/memos/moment.min.js"></script>
+  <script is:inline src="https://memos.314926.xyz/memos/moment.twitter.js"></script>
+  <script is:inline src="https://memos.314926.xyz/memos/highlight.min.js"></script>
+  <script is:inline src="https://static.314926.xyz/js/memos/main.js"></script>
+
+  <!-- 初始化脚本 -->
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 确保所有资源加载完成
+      setTimeout(() => {
+        hljs.highlightAll();
+        // 可选：添加自定义样式适配
+        document.querySelectorAll('.memo').forEach(memo => {
+          memo.classList.add('bg-white', 'dark:bg-gray-800', 'p-4', 'rounded-lg');
+        });
+      }, 500);
+    });
+  </script>
+</BaseLayout>

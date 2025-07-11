@@ -50,7 +50,7 @@ export const theme: ThemeUserConfig = {
       { title: '博客', link: '/blog' },
       { title: '项目', link: '/projects' },
       { title: '友链', link: '/links' },
-      { title: '朋友圈', link: 'https://pyq.kemiao.online/' },
+      { title: '瞬间', link: '/memos' },
       { title: '相册', link: 'https://photos.050815.xyz' },
       { title: '音乐', link: 'https://music.kemiao.online' },
       { title: '关于', link: '/about' },
