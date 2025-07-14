@@ -39,5 +39,5 @@ const blog = defineCollection({
     })
 })
 
-// Define docs collection
-export const content = { blog }
+
+export const collections = { blog }
