@@ -1167,7 +1167,7 @@ git push origin master
                 具体bug千奇百怪，不懂问AI/别的大佬
                 因为主题文件夹下的.git 文件夹的存在，那么主题文件夹会被识别子项目。从而无法被上传到源码仓库。若是遇到添加屏蔽项，但是还是无法正常上传主题文件夹的情况。请先将本地源码中的 themes 文件夹移动到别的目录下。然后 commit 一次。接着将 themes 文件夹移动回来，再 commit 一次。
                 <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 12px 15px; border-radius: 0 6px 6px 0; margin: 15px 0;">
-                    <strong>注意：</strong> 要是还不行，那就删了 butterfly 主题文件夹下的.git 文件夹，然后再重复上述的 commit 操作。
+                    <strong>注意：</strong> 要是还不行，那就删了 solitude 主题文件夹下的.git 文件夹，然后再重复上述的 commit 操作。
                 </div>
             </li>
         </ol>
