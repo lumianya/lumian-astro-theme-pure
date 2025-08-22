@@ -93,14 +93,11 @@ export const theme: ThemeUserConfig = {
     }
   },
 
-  content: {
-    /** External links configuration */
-    externalLinksContent: "外部链接（新窗口打开）",
-    /** Blog page size for pagination (optional) */
-    blogPageSize: 8,
-    // Currently support weibo, x, bluesky
-    share: ['weibo', 'x', 'bluesky']
-  }
+      content: {
+        // ✅ 添加这个必需的配置项
+        externalLinksContent: "外部链接",
+        // 其他内容配置...
+      }
 }
 
 export const integ: IntegrationUserConfig = {
