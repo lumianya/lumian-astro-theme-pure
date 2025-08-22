@@ -93,11 +93,20 @@ export const theme: ThemeUserConfig = {
     }
   },
 
-      content: {
-        // ✅ 添加这个必需的配置项
-        externalLinksContent: "外部链接",
-        // 其他内容配置...
+  content: {
+    /** External links configuration */
+    externalLinks: {
+      content: ' ↗',
+      /** Properties for the external links element */
+      properties: {
+        style: 'user-select:none'
       }
+    },
+    /** Blog page size for pagination (optional) */
+    blogPageSize: 8,
+    // Currently support weibo, x, bluesky
+    share: ['weibo', 'x', 'bluesky']
+  }
 }
 
 export const integ: IntegrationUserConfig = {
