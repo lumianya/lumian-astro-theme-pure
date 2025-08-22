@@ -95,13 +95,7 @@ export const theme: ThemeUserConfig = {
 
   content: {
     /** External links configuration */
-    externalLinksContent: {
-      content: ' ↗',
-      /** Properties for the external links element */
-      properties: {
-        style: 'user-select:none'
-      }
-    },
+    externalLinksContent: "外部链接（新窗口打开）",
     /** Blog page size for pagination (optional) */
     blogPageSize: 8,
     // Currently support weibo, x, bluesky
