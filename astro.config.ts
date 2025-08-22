@@ -34,7 +34,7 @@ export default defineConfig({
   // 1. Vercel (serverless)
  // adapter: vercel(),
  // output: 'server',
-   2. Vercel (static)
+ //  2. Vercel (static)
    adapter: vercelStatic(),
   // 3. Local (standalone)
   // adapter: node({ mode: 'standalone' }),
