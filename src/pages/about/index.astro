@@ -1,5 +1,4 @@
 ---
-import { Comment } from 'astro-pure/advanced'
 import { Button, Collapse, Spoiler, Timeline } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import Substats from '@/components/about/Substats.astro'
@@ -14,14 +13,16 @@ const headings = [
 ]
 ---
 
-<PageLayout title='About' {headings} info='/about'>
+
+<PageLayout title='About' {headings} comment>
   <p>站长 / 克喵</p>
+
   <p>
     一个普通的在南京就读的双非学校的学生，致力于分享资源和生活点滴。
     分享的资源和文章均来自互联网，如有侵权，请联系我删除。
   </p>
-  <p>我的座右铭：每一段旅行都有终点~ <Spoiler>总有些事情高于其他！</Spoiler></p>
-  <Button title='赞助我' class='w-fit' href='/projects#sponsorship' style='ahead' />
+<p>我的座右铭：每一段旅行都有终点~ <Spoiler>总有些事情高于其他！</Spoiler></p>
+  <Button title='赞助我' class='w-fit' href='/projects#sponsorship' variant='ahead' />
 
   {/* general-talk */}
   <h2 id='hobbies'>兴趣</h2>
@@ -342,5 +343,4 @@ const headings = [
       >
     </li> -->
   </ul>
-  <Comment slot='bottom' />
 </PageLayout>
